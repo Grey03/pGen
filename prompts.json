@@ -1,10 +1,10 @@
 {
-    "Default1": {"Prompts":
+    "Default 1": {"Prompts":
     ["Test1",
     "Test2"]
     },
 
-    "Default2": {"Prompts":
+    "Default 2": {"Prompts":
     ["Test3",
     "Test4"]
     }

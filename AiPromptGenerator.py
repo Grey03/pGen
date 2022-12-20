@@ -1,4 +1,4 @@
-import customtkinter,json
+import customtkinter,json, random
 
 from pathlib import Path
 
@@ -10,50 +10,75 @@ customtkinter.set_default_color_theme("blue")
 global fileLocation
 fileLocation =  str(Path(__file__).resolve().parent)
 
-global prompts
-prompts = {}
-
 #setting up the window
 app = customtkinter.CTk()
 app.geometry("400x240")
 app.title("")
 
 #Just refreshes the prompts dictionary
-def reloadList():
+def refreshList():
     global fileLocation
     with open(fileLocation + "\prompts.json") as f:
         x = (json.load(f))
         f.close()
         return x
 
-prompts = reloadList()
 
-def generatePrompt(jsonFile, style, promptLenth):
-    print ('Temp')
+def generatePrompt():
+    #should refresh the list to get data
+    promptData = refreshList()
+
+    global stylesDropdown
+    global promptLength
+    global finalPrompt
+
+    #Gives yah the keys
+    #print(list(promptData.keys()))
+
+    prompts = (promptData[stylesDropdown.get()]["Prompts"])
+
+    print(promptLength.get())
+
+    finaloutput = []
+    if int(promptLength.get()):
+        for i in range(int(promptLength.get())):
+            finaloutput.append(prompts[(random.randint(0, len(prompts) -1))])
+    else:
+        return
+    
+    finalPrompt.delete(0, len(finalPrompt.get()))
+    finalPrompt.insert(0, ", ".join(finaloutput))
+
+
+
+    #should get the style selected from the dropdown tool
+    #should get the promptLength from promptLength entry box
+    #Then go the the selected style and randomly pick the promptLength of prompts from said style
 
 
 #------ Main Widget Frame Start
 mainWidgetsFrame = customtkinter.CTkFrame(master=app, fg_color="transparent")
 
-styleLabel = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Style")
+styleLabel = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Styles")
 styleLabel.pack()
 
+#should get the styles from the refreshing the list, then should apply them here
+global stylesDropdown
 stylesDropdown = customtkinter.CTkOptionMenu(master=mainWidgetsFrame,
-values=["Style 1", "Style 2"])
+values=(list((refreshList()).keys())))
 
 stylesDropdown.pack(pady=10)
-stylesDropdown.set("Style 1")
+stylesDropdown.set((list((refreshList()).keys()))[0])
 
-promptLength = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Prompt Length")
+global promptLength
+promptLength = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Length",width=55)
 promptLength.pack(pady=10)
 
-#finalPrompt = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Temporary")
-#finalPrompt.pack(pady=10)
-
+global finalPrompt
 finalPrompt = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Output")
 finalPrompt.pack(pady=10)
 
-generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate")
+generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
 generateButton.pack(pady=10)
 
 mainWidgetsFrame.pack()
