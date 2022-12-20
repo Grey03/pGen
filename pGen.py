@@ -17,7 +17,7 @@ app.title("pGen")
 try:
     app.iconbitmap(fileLocation + "\pGenLogo.ico")
 except:
-    messagebox.showerror(titlle="iconbitmap", message="The Icon failed to load.")
+    messagebox.showerror(title="iconbitmap", message="The Icon failed to load.")
 
 #Just refreshes the prompts dictionary
 def refreshList():
@@ -138,7 +138,7 @@ def promptMenu():
     try:
         menu.iconbitmap(fileLocation + "\pGenLogo.ico")
     except:
-        messagebox.showerror(titlle="iconbitmap", message="The Icon failed to load.")
+        messagebox.showerror(title="iconbitmap", message="The Icon failed to load.")
 
 
     upperFrame = customtkinter.CTkFrame(master = menu)
