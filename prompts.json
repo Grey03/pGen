@@ -1,14 +1,73 @@
 {
-    "Anime": {
+    "Default": {
         "Prompts": [
-            "Test1",
-            "Test2"
+            "Cat",
+            "Dog",
+            "Mouse",
+            "Lizard",
+            "Elephant",
+            "Giraffe",
+            "Gorilla",
+            "Person",
+            "Human",
+            "House",
+            "City",
+            "Underground",
+            "Inside",
+            "Dark",
+            "Light",
+            "Day",
+            "Night",
+            "Noon",
+            "Twilight",
+            "Landscape",
+            "Teddy Bear",
+            "Toys",
+            "Car",
+            "Na MX-5 Miata"
         ]
     },
-    "Cat": {
+    "Anime": {
         "Prompts": [
-            "Test3",
-            "Test4"
+            "Epic Battle",
+            "Mecha",
+            "Katana",
+            "Magic",
+            "Isekai",
+            "Colorful",
+            "Grey",
+            "Bright",
+            "Dark"
+        ]
+    },
+    "Monster/Creatures": {
+        "Prompts": [
+            "Cat",
+            "Dog",
+            "Bunny",
+            "Snail",
+            "Fox",
+            "Raccoon",
+            "Dragon",
+            "Oni",
+            "Ogre",
+            "Orc",
+            "Angel",
+            "God",
+            "Deity",
+            "Demon",
+            "Witch",
+            "Wizard",
+            "Vampire",
+            "Spider",
+            "Centipede",
+            "Lamia",
+            "Zombie",
+            "Skeleton",
+            "Ghost",
+            "Ghoul",
+            "Slime",
+            "Kitsune"
         ]
     }
 }

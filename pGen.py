@@ -15,7 +15,7 @@ fileLocation =  str(Path(__file__).resolve().parent)
 app = customtkinter.CTk()
 app.geometry("400x240")
 app.title("pGen")
-#Insert Menu Icon Here
+app.iconbitmap(fileLocation + "\pGenLogo.ico")
 
 #Just refreshes the prompts dictionary
 def refreshList():
@@ -33,12 +33,14 @@ def generatePrompt():
     prompts = (promptData[stylesDropdown.get()]["Prompts"])
 
     finaloutput = []
-
     try:
-        for i in range(int(promptLength.get())):
-            newprompt = prompts[random.randint(0, len(prompts) -1)]
-            if newprompt not in finaloutput:
-                finaloutput.append(newprompt)
+        if (int(promptLength.get()) <= len(prompts)):
+            while len(finaloutput) < (int(promptLength.get())):
+                newprompt = prompts[random.randint(0, len(prompts) -1)]
+                if newprompt not in finaloutput:
+                    finaloutput.append(newprompt)
+        else:
+            messagebox.showerror("Generation Error", "The value you entered is too large! You can only generate " + str(len(prompts)) + " or less!")
         
     except:
         messagebox.showerror("Generation Error", "The value you entered is not a number!")
@@ -74,11 +76,14 @@ def promptMenu():
         global promptTextBox, styleName, fileLocation
 
         toJson = (list((promptTextBox.get("1.0", "end")).split("\n")))
+        
         while ("") in toJson:
             toJson.remove("")
+
         promptData = refreshList()
 
         promptData[styleName.get()] = promptData.pop(promptStyleDropdown.get())
+        promptData[styleName.get()].update({"Prompts": toJson})
 
         with open(fileLocation + "\prompts.json", "w") as f:
             json.dump(promptData, f, indent=4)
@@ -86,6 +91,8 @@ def promptMenu():
 
         refreshDropdown()
         refreshTextBox()
+
+        messagebox.showinfo(title="Save", message="Successfully Saved!")
 
     def deleteStyle():
         global fileLocation, promptStyleDropdown
@@ -121,10 +128,12 @@ def promptMenu():
 
         refreshDropdown()
         refreshTextBox()
+
+        messagebox.showinfo(title="New Style", message="New style successfully created!")
                   
     menu = customtkinter.CTkToplevel()
     menu.title("Prompts Editor")
-    #Insert Menu Icon Here
+    menu.iconbitmap(fileLocation + "\pGenLogo.ico")
     upperFrame = customtkinter.CTkFrame(master = menu)
 
     global promptStyleDropdown
