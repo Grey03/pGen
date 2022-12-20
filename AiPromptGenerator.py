@@ -159,37 +159,44 @@ def promptMenu():
 def createMainMenu():
     mainWidgetsFrame = customtkinter.CTkFrame(master=app, fg_color="transparent")
 
-    styleLabel = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Styles")
+    styleFrame = customtkinter.CTkFrame(master=mainWidgetsFrame, fg_color="transparent")
+
+    styleLabel = customtkinter.CTkLabel(master=styleFrame, text="Styles")
     styleLabel.pack()
 
     global stylesDropdown
-    stylesDropdown = customtkinter.CTkOptionMenu(master=mainWidgetsFrame,
+    stylesDropdown = customtkinter.CTkOptionMenu(master=styleFrame,
     values=(list((refreshList()).keys())))
+    stylesDropdown.pack()
 
-    stylesDropdown.pack(pady=10)
     stylesDropdown.set((list((refreshList()).keys()))[0])
 
-    global promptLength
-    promptLength = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Length",width=55)
-    promptLength.pack(pady=10)
+    styleFrame.pack(pady=5)
 
-    global finalPrompt
-    finalPrompt = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Output")
-    finalPrompt.pack(pady=10)
+
+    lengthSettingsFrame = customtkinter.CTkFrame(master=mainWidgetsFrame, fg_color="transparent")
+
+    global promptLength
+    promptLength = customtkinter.CTkEntry(master=lengthSettingsFrame, placeholder_text="Length",width=55)
+    promptLength.pack(side="left", padx=2)
+
+    promptEditorButton = customtkinter.CTkButton(master=lengthSettingsFrame, text="Editor", command=promptMenu, width=50)
+    promptEditorButton.pack(side="left", padx=2)
+
+    lengthSettingsFrame.pack(pady=5)
+
 
     generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
-    generateButton.pack(pady=10)
+    generateButton.pack()
 
-    mainWidgetsFrame.grid(row=0,column=1)
-    #mainWidgetsFrame.pack(side="left")
+    mainWidgetsFrame.pack(side="left")
+
     #------ Main Widget Frame End
 
-    promptFrame = customtkinter.CTkFrame(master=app)
-    #promptFrame.pack(side="left")
-    promptFrame.grid(row=0,column=2)
-
-    promptEditorButton = customtkinter.CTkButton(master=promptFrame, text="Editor", command=promptMenu, width=50)
-    promptEditorButton.grid(row=0,column=0)
+    global finalPrompt
+    finalPrompt = customtkinter.CTkEntry(master=app, placeholder_text="Output")
+    finalPrompt.pack(side="left",pady=10)
+    
 
 createMainMenu()
 
