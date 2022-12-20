@@ -1,5 +1,6 @@
-import customtkinter,json, random
+import customtkinter, json, random
 
+from tkinter import messagebox
 from pathlib import Path
 
 #setting the theme of the window
@@ -23,7 +24,6 @@ def refreshList():
         f.close()
         return x
 
-
 def generatePrompt():
     promptData = refreshList()
 
@@ -38,40 +38,44 @@ def generatePrompt():
             newprompt = prompts[random.randint(0, len(prompts) -1)]
             if newprompt not in finaloutput:
                 finaloutput.append(newprompt)
+            else:
+                break
         
     except:
+        messagebox.showerror("Generation Error", "The value you entered is not a number!")
         return
 
     finalPrompt.delete(0, len(finalPrompt.get()))
     finalPrompt.insert(0, ", ".join(finaloutput))
 
-
 #------ Main Widget Frame Start
-mainWidgetsFrame = customtkinter.CTkFrame(master=app, fg_color="transparent")
+def createMainMenu():
+    mainWidgetsFrame = customtkinter.CTkFrame(master=app, fg_color="transparent")
 
-styleLabel = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Styles")
-styleLabel.pack()
+    styleLabel = customtkinter.CTkLabel(master=mainWidgetsFrame, text="Styles")
+    styleLabel.pack()
 
-#should get the styles from the refreshing the list, then should apply them here
-global stylesDropdown
-stylesDropdown = customtkinter.CTkOptionMenu(master=mainWidgetsFrame,
-values=(list((refreshList()).keys())))
+    global stylesDropdown
+    stylesDropdown = customtkinter.CTkOptionMenu(master=mainWidgetsFrame,
+    values=(list((refreshList()).keys())))
 
-stylesDropdown.pack(pady=10)
-stylesDropdown.set((list((refreshList()).keys()))[0])
+    stylesDropdown.pack(pady=10)
+    stylesDropdown.set((list((refreshList()).keys()))[0])
 
-global promptLength
-promptLength = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Length",width=55)
-promptLength.pack(pady=10)
+    global promptLength
+    promptLength = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Length",width=55)
+    promptLength.pack(pady=10)
 
-global finalPrompt
-finalPrompt = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Output")
-finalPrompt.pack(pady=10)
+    global finalPrompt
+    finalPrompt = customtkinter.CTkEntry(master=mainWidgetsFrame, placeholder_text="Output")
+    finalPrompt.pack(pady=10)
 
-generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
-generateButton.pack(pady=10)
+    generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
+    generateButton.pack(pady=10)
 
-mainWidgetsFrame.pack()
+    mainWidgetsFrame.pack()
 #------ Main Widget Fram End
+
+createMainMenu()
 
 app.mainloop()
