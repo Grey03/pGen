@@ -1,11 +1,14 @@
 {
-    "Default 1": {"Prompts":
-    ["Test1",
-    "Test2"]
+    "Anime": {
+        "Prompts": [
+            "Test1",
+            "Test2"
+        ]
     },
-
-    "Default 2": {"Prompts":
-    ["Test3",
-    "Test4"]
+    "Cat": {
+        "Prompts": [
+            "Test3",
+            "Test4"
+        ]
     }
 }

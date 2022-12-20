@@ -15,6 +15,7 @@ fileLocation =  str(Path(__file__).resolve().parent)
 app = customtkinter.CTk()
 app.geometry("400x240")
 app.title("")
+#Insert Menu Icon Here
 
 #Just refreshes the prompts dictionary
 def refreshList():
@@ -38,15 +39,121 @@ def generatePrompt():
             newprompt = prompts[random.randint(0, len(prompts) -1)]
             if newprompt not in finaloutput:
                 finaloutput.append(newprompt)
-            else:
-                break
         
     except:
         messagebox.showerror("Generation Error", "The value you entered is not a number!")
         return
 
-    finalPrompt.delete(0, len(finalPrompt.get()))
+    finalPrompt.delete(0, "end")
     finalPrompt.insert(0, ", ".join(finaloutput))
+
+def promptMenu():
+    def refreshDropdown():
+        global promptStyleDropdown, stylesDropdown
+
+        promptStyleDropdown.configure(values=(list((refreshList()).keys())))
+        promptStyleDropdown.set((list((refreshList()).keys()))[0])
+
+        stylesDropdown.configure(values=(list((refreshList()).keys())))
+        stylesDropdown.set((list((refreshList()).keys()))[0])
+
+    def refreshTextBox(*args):
+        global promptTextBox, styleName, promptStyleDropdown
+        promptData = refreshList()
+        prompts = promptData[promptStyleDropdown.get()]["Prompts"]
+
+        promptTextBox.delete("0.0","end")
+
+        for i in range(len(prompts)):
+            promptTextBox.insert("end", str(prompts[i] + "\n"))
+
+        styleName.delete(0,"end")
+        styleName.insert(0,promptStyleDropdown.get())
+
+    def savePrompt():
+        global promptTextBox, styleName, fileLocation
+
+        toJson = (list((promptTextBox.get("1.0", "end")).split("\n")))
+        while ("") in toJson:
+            toJson.remove("")
+        promptData = refreshList()
+
+        promptData[styleName.get()] = promptData.pop(promptStyleDropdown.get())
+
+        with open(fileLocation + "\prompts.json", "w") as f:
+            json.dump(promptData, f, indent=4)
+            f.close()
+
+        refreshDropdown()
+        refreshTextBox()
+
+    def deleteStyle():
+        global fileLocation, promptStyleDropdown
+        promptData = refreshList()
+        promptData.pop(promptStyleDropdown.get())
+
+        with open(fileLocation + "\prompts.json", "w") as f:
+            json.dump(promptData, f, indent=4)
+            f.close()
+
+        refreshDropdown()
+        refreshTextBox()
+    
+    def startDelete():
+        global promptStyleDropdown
+        answer = messagebox.askyesno(title="Delete Style", message=("Are you sure you want to delete " + promptStyleDropdown.get() + " style?"))
+        if (answer):
+            deleteStyle()
+
+    def newStyle():
+        global fileLocation
+        promptData = refreshList()
+        newName = "New Style"
+        x = 0
+        while (newName + str(x)) in promptData:
+            x+=1
+        newName = newName + (str(x))
+        finalData = {newName: { "Prompts": ["Word1", "Word2", "Word3"]}}
+        promptData.update(finalData)
+        with open(fileLocation + "\prompts.json", "w") as f:
+            json.dump(promptData, f, indent=4)
+            f.close()
+
+        refreshDropdown()
+        refreshTextBox()
+                  
+    menu = customtkinter.CTkToplevel()
+    menu.title("Prompts Editor")
+    #Insert Menu Icon Here
+    upperFrame = customtkinter.CTkFrame(master = menu)
+
+    global promptStyleDropdown
+    promptStyleDropdown = customtkinter.CTkOptionMenu(master=upperFrame,
+    values=(list((refreshList()).keys())), command=refreshTextBox)
+
+    promptStyleDropdown.pack(side="left")
+    promptStyleDropdown.set((list((refreshList()).keys()))[0])
+
+    newStyleButton = customtkinter.CTkButton(master=upperFrame, text="New Style", command=newStyle)
+    newStyleButton.pack(side="right")
+
+    upperFrame.pack()
+
+    global styleName
+    styleName = customtkinter.CTkEntry(master=menu, placeholder_text="Style Name")
+    styleName.pack()
+
+    global promptTextBox
+    promptTextBox = customtkinter.CTkTextbox(master=menu, activate_scrollbars=True)
+    promptTextBox.pack()
+
+    refreshTextBox()
+
+    saveButton = customtkinter.CTkButton(master=menu, text="Save", command=savePrompt)
+    saveButton.pack()
+
+    deleteButton = customtkinter.CTkButton(master=menu, text="Delete", command=startDelete)
+    deleteButton.pack()
 
 #------ Main Widget Frame Start
 def createMainMenu():
@@ -73,8 +180,11 @@ def createMainMenu():
     generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
     generateButton.pack(pady=10)
 
-    mainWidgetsFrame.pack()
-#------ Main Widget Fram End
+    mainWidgetsFrame.pack(side="left")
+    #------ Main Widget Frame End
+
+    promptEditorButton = customtkinter.CTkButton(master=app, text="Editor", command=promptMenu)
+    promptEditorButton.pack(side="right")
 
 createMainMenu()
 
