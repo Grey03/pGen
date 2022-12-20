@@ -14,7 +14,7 @@ fileLocation =  str(Path(__file__).resolve().parent)
 #setting up the window
 app = customtkinter.CTk()
 app.geometry("400x240")
-app.title("")
+app.title("pGen")
 #Insert Menu Icon Here
 
 #Just refreshes the prompts dictionary
@@ -44,8 +44,8 @@ def generatePrompt():
         messagebox.showerror("Generation Error", "The value you entered is not a number!")
         return
 
-    finalPrompt.delete(0, "end")
-    finalPrompt.insert(0, ", ".join(finaloutput))
+    finalPrompt.delete("0.0", "end")
+    finalPrompt.insert("end", ", ".join(finaloutput))
 
 def promptMenu():
     def refreshDropdown():
@@ -161,12 +161,14 @@ def createMainMenu():
 
     styleFrame = customtkinter.CTkFrame(master=mainWidgetsFrame, fg_color="transparent")
 
-    styleLabel = customtkinter.CTkLabel(master=styleFrame, text="Styles")
-    styleLabel.pack()
+    styleFont = customtkinter.CTkFont(family="greyFont", size=24, weight="bold", underline=True)
+
+    styleLabel = customtkinter.CTkLabel(master=styleFrame, text="Styles", font=styleFont)
+    styleLabel.pack(pady=5)
 
     global stylesDropdown
     stylesDropdown = customtkinter.CTkOptionMenu(master=styleFrame,
-    values=(list((refreshList()).keys())))
+    values=(list((refreshList()).keys())), height=30)
     stylesDropdown.pack()
 
     stylesDropdown.set((list((refreshList()).keys()))[0])
@@ -186,16 +188,24 @@ def createMainMenu():
     lengthSettingsFrame.pack(pady=5)
 
 
-    generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt)
+    generateButton = customtkinter.CTkButton(master=mainWidgetsFrame, text="Generate", command=generatePrompt, height=45)
     generateButton.pack()
 
-    mainWidgetsFrame.pack(side="left")
+    mainWidgetsFrame.pack(side="left", padx=10)
 
     #------ Main Widget Frame End
 
+    finalPromptFrame = customtkinter.CTkFrame(master=app, fg_color="transparent")
+
+    finalPromptFont = customtkinter.CTkFont(family="greyFont", size=16, weight="bold")
+
+    finalPromptLabel = customtkinter.CTkLabel(master=finalPromptFrame,text="Output:", font=finalPromptFont)
+    finalPromptLabel.pack()
     global finalPrompt
-    finalPrompt = customtkinter.CTkEntry(master=app, placeholder_text="Output")
-    finalPrompt.pack(side="left",pady=10)
+    finalPrompt = customtkinter.CTkTextbox(master=finalPromptFrame, activate_scrollbars=True, height=150, width=250)
+    finalPrompt.pack()
+
+    finalPromptFrame.pack(side="left", pady=10,padx=10)
     
 
 createMainMenu()
