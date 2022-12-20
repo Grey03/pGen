@@ -25,35 +25,25 @@ def refreshList():
 
 
 def generatePrompt():
-    #should refresh the list to get data
     promptData = refreshList()
 
-    global stylesDropdown
-    global promptLength
-    global finalPrompt
-
-    #Gives yah the keys
-    #print(list(promptData.keys()))
+    global stylesDropdown, promptLength, finalPrompt
 
     prompts = (promptData[stylesDropdown.get()]["Prompts"])
 
-    print(promptLength.get())
-
     finaloutput = []
-    if int(promptLength.get()):
+
+    try:
         for i in range(int(promptLength.get())):
-            finaloutput.append(prompts[(random.randint(0, len(prompts) -1))])
-    else:
+            newprompt = prompts[random.randint(0, len(prompts) -1)]
+            if newprompt not in finaloutput:
+                finaloutput.append(newprompt)
+        
+    except:
         return
-    
+
     finalPrompt.delete(0, len(finalPrompt.get()))
     finalPrompt.insert(0, ", ".join(finaloutput))
-
-
-
-    #should get the style selected from the dropdown tool
-    #should get the promptLength from promptLength entry box
-    #Then go the the selected style and randomly pick the promptLength of prompts from said style
 
 
 #------ Main Widget Frame Start
