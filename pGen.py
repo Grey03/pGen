@@ -13,9 +13,11 @@ fileLocation =  str(Path(__file__).resolve().parent)
 
 #setting up the window
 app = customtkinter.CTk()
-app.geometry("400x240")
 app.title("pGen")
-app.iconbitmap(fileLocation + "\pGenLogo.ico")
+try:
+    app.iconbitmap(fileLocation + "\pGenLogo.ico")
+except:
+    messagebox.showerror(titlle="iconbitmap", message="The Icon failed to load.")
 
 #Just refreshes the prompts dictionary
 def refreshList():
@@ -133,7 +135,12 @@ def promptMenu():
                   
     menu = customtkinter.CTkToplevel()
     menu.title("Prompts Editor")
-    menu.iconbitmap(fileLocation + "\pGenLogo.ico")
+    try:
+        menu.iconbitmap(fileLocation + "\pGenLogo.ico")
+    except:
+        messagebox.showerror(titlle="iconbitmap", message="The Icon failed to load.")
+
+
     upperFrame = customtkinter.CTkFrame(master = menu)
 
     global promptStyleDropdown
