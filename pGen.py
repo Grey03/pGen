@@ -14,6 +14,7 @@ fileLocation =  str(Path(__file__).resolve().parent)
 #setting up the window
 app = customtkinter.CTk()
 app.title("pGen")
+app.resizable(False,False)
 try:
     app.iconbitmap(fileLocation + "\pGenLogo.ico")
 except:
@@ -135,6 +136,7 @@ def promptMenu():
                   
     menu = customtkinter.CTkToplevel()
     menu.title("Prompts Editor")
+    menu.resizable(False,False)
     try:
         menu.iconbitmap(fileLocation + "\pGenLogo.ico")
     except:
